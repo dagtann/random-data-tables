@@ -1,9 +1,34 @@
 <script>
   import svelteLogo from './assets/svelte.svg'
   import Counter from './lib/Counter.svelte'
+  import {getRandomUsers} from './lib/requests.js'
+
+  let promise = getRandomUsers();
 </script>
 
 <main>
+{#await promise}
+  ... waiting
+{:then users}
+<table>
+  <thead>
+    <tr>
+      <th>Last Name</th>
+      <th>First Name</th>
+      <th>Email</th>  
+    </tr>
+  {#each users as user}
+	  <tr>
+      <td>{user.first_name}</td>
+      <td>{user.last_name}</td>
+      <td>{user.email}</td>
+    </tr>
+  {/each}
+</table>
+{:catch error}
+	<p style="color: red">{error.message}</p>
+{/await}
+
   <div>
     <a href="https://vitejs.dev" target="_blank" rel="noreferrer"> 
       <img src="/vite.svg" class="logo" alt="Vite Logo" />
