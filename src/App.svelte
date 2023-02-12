@@ -4,19 +4,33 @@
   import {getRandomUsers} from './lib/requests.js'
 
   let promise = getRandomUsers();
+
+  function makeTable(node) {
+	  const dataTable = new simpleDatatables.DataTable(node, {
+      searchable: false,
+      fixedHeight: true,
+    });
+
+	return {
+		destroy() {
+			// ...cleanup goes here
+		}
+	};
+}
 </script>
 
 <main>
 {#await promise}
   ... waiting
 {:then users}
-<table>
+<table use:makeTable>
   <thead>
     <tr>
       <th>Last Name</th>
       <th>First Name</th>
       <th>Email</th>  
     </tr>
+  </thead>
   {#each users as user}
 	  <tr>
       <td>{user.first_name}</td>
